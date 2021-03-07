@@ -1,0 +1,19 @@
+{
+  "name": "simple-webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/millionbug/simple-webpack.git"
+  },
+  "author": "黄小锤",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/millionbug/simple-webpack/issues"
+  },
+  "homepage": "https://github.com/millionbug/simple-webpack#readme"
+}
