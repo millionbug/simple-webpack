@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/millionbug/simple-webpack/issues"
   },
-  "homepage": "https://github.com/millionbug/simple-webpack#readme"
+  "homepage": "https://github.com/millionbug/simple-webpack#readme",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
 }
