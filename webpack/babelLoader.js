@@ -3,6 +3,7 @@ const fs = require('fs')
 
 let i = 1;
 function babelLoader (source, option) {
+    console.log(source, '🐘')
     let res = core.transform(source, {
         sourceType: 'module'
     });

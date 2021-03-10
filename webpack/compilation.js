@@ -2,6 +2,7 @@
 const { completeFilePath, readFileWithHash, getRootPath } = require('./util');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
+const path = require('path');
 class Compilation {
 
     moduleMap = {};
@@ -26,28 +27,30 @@ class Compilation {
         const modulePath = getRootPath(this.root, sourcePath, this.root);
 
         // 获取编译后的模块代码，和模块内的依赖数组
-        const [moduleCode, relyInModule] = this.parse(sourceCode, modulePath);
+        const [moduleCode, relyInModule] = this.parse(sourceCode, path.dirname(modulePath));
         this.moduleMap[modulePath] = moduleCode;
         if (relyInModule && relyInModule.length) {
             for (let i = 0, len = relyInModule.length; i < len; i++) {
+                const rely = relyInModule[i];
                 await this.moduleWalker(rely);
             }
         }
     }
 
     async loadParser(path) {
+        console.log(path, '🐘')
         let [codeContent, md5Hash] = await readFileWithHash(path);
         const { loaders } = this;
         for (let i = 0, len = loaders.length; i < len; i++) {
             const loaderItem = loaders[i];
             const {test, include, use} = loaderItem;
             // 判断loader是否满足匹配规则
-        console.log(path, test, use, '🐟')
+        console.log(path, test, use, 'codeContent:', codeContent, '🐟')
 
             if (path.match(test)) {
                 // 如果loader是数组，则从最后一个开始调用
                 // 这里简化规则，必须是数组
-                if (Array.isArray(use)) {
+                if (Array.isArray(use) && use.length) {
                     const curr = use.pop();
                     let loaderFunc;
                     if (typeof curr.loader === 'string') {
@@ -66,7 +69,7 @@ class Compilation {
 
     parse(sourceCode, modulePath) {
         // 分析 ast 词法树
-        const ast = parser.parse(sourceCode);
+        const ast = parser.parse(sourceCode, {sourceType: 'module', });
         // 获取文件依赖的所有模块
         const relyInModule = [];
 
@@ -89,11 +92,12 @@ class Compilation {
                 //把当前依赖的模块加入到数组中，其实这存的是字符串，
                 //例如 如果当前js文件 有一句 import message from './message.js'， 
                 //'./message.js' === node.source.value
-                relyInModule.push(node.source.value);
+                const rely = completeFilePath(getRootPath(modulePath, node.source.value, this.root));
+                relyInModule.push(rely);
             }
         });
         // 这里没有改写代码，直接返回sourcecode能行吗？
-        return [sourceCode, modulePath];
+        return [sourceCode, relyInModule];
     }
 
 }

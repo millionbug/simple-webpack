@@ -23,7 +23,7 @@ async function readFileWithHash(sourcePath) {
             data += chunk;
         });
         fileStream.on('end', () => {
-            resolve(['', data]);
+            resolve([data, '']);
         })
     });
 }
@@ -34,15 +34,19 @@ async function readFileWithHash(sourcePath) {
  * @export
  * @param {*} source
  */
-async function getRootPath (dirpath, moduleName, root) {
+function getRootPath (dirpath, moduleName, root) {
+    console.log('🧱', dirpath, moduleName, root)
+    let result = '';
     if (/^[a-zA-Z\$_][a-zA-Z\d_]*/.test(moduleName)) {
       // 如果模块名满足一个变量的正则，说明引用的是node模块
-      return './node_modules/' + moduleName
+      result = './node_modules/' + moduleName
     } else {
-      return './'
+      result = './'
       + path.relative(root, path.resolve(dirpath, moduleName))
       + (path.extname(moduleName).length === 0 ? '.js' : '')
     }
+    console.log(result, '墙🧱')
+    return result;
 }
 
 exports.getRootPath = getRootPath;
