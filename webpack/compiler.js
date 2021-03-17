@@ -33,15 +33,15 @@ class Compiler {
         }
     }
     
-    // hooks = {
-    //     // 生命周期事件
-    //     beforeRun: new AsyncSeriesHook(['compiler']), // compiler代表我们将向回调事件中传入一个compiler参数
-    //     afterRun: new AsyncSeriesHook(['compiler']),
-    //     beforeCompile: new AsyncSeriesHook(['compiler']),
-    //     afterCompile: new AsyncSeriesHook(['compiler']),
-    //     emit: new AsyncSeriesHook(['compiler']),
-    //     failed: new AsyncSeriesHook(['compiler']),
-    // }
+    hooks = {
+        // 生命周期事件
+        beforeRun: new AsyncSeriesHook(['compiler']), // compiler代表我们将向回调事件中传入一个compiler参数
+        afterRun: new AsyncSeriesHook(['compiler']),
+        beforeCompile: new AsyncSeriesHook(['compiler']),
+        afterCompile: new AsyncSeriesHook(['compiler']),
+        emit: new AsyncSeriesHook(['compiler']),
+        failed: new AsyncSeriesHook(['compiler']),
+    }
 
     async run() {
         // this.hooks.beforeRun.callAsync(this);
